@@ -70,5 +70,43 @@ const makeGuess = function (guess) {
     } else {
         guessedLetters.push(guess);
         console.log(guessedLetters);
+        showGuessedLetters();
+        updateWordInProgress(guessedLetters);
     }
 };
+
+const showGuessedLetters = function () {
+    usersGuessedLetters.innerHTML = "";
+    for (const letter of guessedLetters) {
+        const li = document.createElement("li");
+        li.innerText = letter;
+        usersGuessedLetters.append(li);
+    }
+};
+
+// update the word in progress with guesses
+const updateWordInProgress = function (guessedLetters) {
+    const wordUpper = word.toUpperCase(); // chosen word appears in upper case
+    const wordArray = wordUpper.split(""); // upper cased chosen word is spaced out
+    //console.log(wordArray);
+
+    // reveals the chosen word if guesses match the letters from the chosen word; otherwise, keeps the circle symbol
+    const revealWord = [];
+    for (const letter of wordArray) {
+        if (guessedLetters.includes(letter)) {
+            revealWord.push(letter.toUpperCase());
+        } else {
+            revealWord.push("●")
+        }
+    }
+    wordInProgress.innerText = revealWord.join("");
+    
+    checkIfWin();
+};
+
+const checkIfWin = function () {
+    if (wordUpper === wordInProgress.innerText) {
+        message.classList.add("win");
+        message.innerHTML = `<p class="highlight">You guessed correct the word! Congrats!</p>`;
+    }
+}
